@@ -1,8 +1,7 @@
 package ui;
 
-import java.math.BigDecimal;
-
 import helper.ContentProvider;
+import helper.MyActionGroup;
 import helper.TableViewerLabelProvider;
 import model.material.MaterialItem;
 
@@ -15,18 +14,17 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableColumn;
 
+import service.MaterialService;
 import ui.material.MaterialItemCreationDialog;
 
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.internal.statushandlers.LabelProviderWrapper;
+import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -40,6 +38,8 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 
 public class MainUI extends ApplicationWindow {
 	private DataBindingContext m_bindingContext;
+	private TableViewer tableViewer;
+	private MaterialService mtrlService;
 	private Table table;
 	private Composite container;
 
@@ -47,7 +47,10 @@ public class MainUI extends ApplicationWindow {
 	 * Create the application window.
 	 */
 	public MainUI() {
-		super(null);
+		super(null);	
+		
+		mtrlService = new MaterialService();
+		
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
@@ -63,7 +66,7 @@ public class MainUI extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		container = new Composite(parent, SWT.NONE);
 		
-		TableViewer tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
 		
 		table.setHeaderVisible(true);
@@ -87,6 +90,8 @@ public class MainUI extends ApplicationWindow {
         valueColumn3.getColumn().setWidth(80);
 		
 		tableViewer.setContentProvider(new ContentProvider());
+		
+		tableViewer.setInput(mtrlService.getAllRecords());
 
 		tableViewer.setLabelProvider(new TableViewerLabelProvider());
 		
@@ -108,16 +113,12 @@ public class MainUI extends ApplicationWindow {
 				}
 
 			}
-
 			
 		});
-//		
-//		MyActionGroup actionGroup = new MyActionGroup(tableViewer);  
-//
-//		actionGroup.fillContextMenu(new MenuManager());
-//		
-//		tableViewer.setInput(miService.getAllItems());
 		
+		MyActionGroup actionGroup = new MyActionGroup(tableViewer);  
+
+		actionGroup.fillContextMenu(new MenuManager());		
 		
 		m_bindingContext = initDataBindings();
 		
@@ -155,8 +156,9 @@ public class MainUI extends ApplicationWindow {
 				
 				if(ret == TitleAreaDialog.OK){
 					item = micd.getMaterialItem();
+					mtrlService.add(item);
 					
-					MessageDialog.openInformation(null, "Alert", item.getItemName());
+					tableViewer.refresh();
 				}
 
 			}

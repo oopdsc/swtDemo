@@ -1,5 +1,7 @@
 package ui.material;
 
+import java.math.BigDecimal;
+
 import model.material.MaterialItem;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -12,8 +14,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.internal.WorkbenchPlugin;
 
 import swing2swt.layout.BorderLayout;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -33,7 +37,7 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 	public MaterialItemCreationDialog(Shell parentShell) {
 		super(parentShell);
 		materialItem = new MaterialItem();
-
+		
 		//setMessage("Wizard Page description");
 	}
 
@@ -44,7 +48,7 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle("Material Item");
-		setMessage("Create a new material item");
+		//setMessage("Create a new material item");
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -77,7 +81,6 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 		
 		text_2 = new Text(composite_1, SWT.BORDER);
 		text_2.setBounds(188, 130, 114, 20);
-
 		return area;
 	}
 
@@ -123,8 +126,9 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 		val = text_1.getText();
 		materialItem.setItemName(val);
 		
-		val = text_2.getText();
+		materialItem.setItemMidu(new BigDecimal("0"));
 		
+		val = text_2.getText();
 		if(!val.equals("")){
 			this.setErrorMessage("Please Do not fill item midu");
 			
@@ -137,7 +141,7 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-	    newShell.setText("New Material Item");
+	    newShell.setText("Material Item");
 	}
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
