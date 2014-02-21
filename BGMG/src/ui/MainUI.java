@@ -2,6 +2,7 @@ package ui;
 
 import helper.ContentProvider;
 import helper.MyActionGroup;
+import helper.ResourcePlugin;
 import helper.TableViewerLabelProvider;
 import model.material.MaterialItem;
 
@@ -14,6 +15,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -21,6 +24,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import service.MaterialService;
+import ui.material.AuxiliaryMaterialCreationDialog;
 import ui.material.MaterialItemCreationDialog;
 
 import org.eclipse.swt.widgets.Table;
@@ -41,6 +45,7 @@ public class MainUI extends ApplicationWindow {
 	private TableViewer tableViewer;
 	private MaterialService mtrlService;
 	private Table table;
+	private CTabFolder tabFolder;
 	private Composite container;
 
 	/**
@@ -66,27 +71,34 @@ public class MainUI extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		container = new Composite(parent, SWT.NONE);
 		
-		tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
+		tabFolder = new CTabFolder(container, SWT.BORDER);
+		tabFolder.setBounds(0, 0, 434, 189);
+		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+		
+		tableViewer = new TableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
 		
+		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.CLOSE);
+		tbtmNewItem.setText(ResourcePlugin.getProperty("material.list.tabName"));
+		tbtmNewItem.setControl(table);
+				
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.setBounds(0, 0, 100, 100);
-		
+		table.setBounds(0, 0, 100, 100);		
 		
 		TableViewerColumn valueColumn = new TableViewerColumn(tableViewer,
                 SWT.CENTER);
-        valueColumn.getColumn().setText("ID");
+        valueColumn.getColumn().setText(ResourcePlugin.getProperty("material.table.column.id"));
         valueColumn.getColumn().setWidth(150);
         
 		TableViewerColumn valueColumn2 = new TableViewerColumn(tableViewer,
                 SWT.CENTER);
-        valueColumn2.getColumn().setText("Name");
+        valueColumn2.getColumn().setText(ResourcePlugin.getProperty("material.table.column.name"));
         valueColumn2.getColumn().setWidth(300);
         
 		TableViewerColumn valueColumn3 = new TableViewerColumn(tableViewer,
                 SWT.CENTER);
-        valueColumn3.getColumn().setText("Midu");
+        valueColumn3.getColumn().setText(ResourcePlugin.getProperty("material.table.column.midu"));
         valueColumn3.getColumn().setWidth(80);
 		
 		tableViewer.setContentProvider(new ContentProvider());
@@ -141,10 +153,10 @@ public class MainUI extends ApplicationWindow {
 	protected MenuManager createMenuManager() {
 		MenuManager menuManager = new MenuManager("menu");
 		
-		MenuManager fileMenu = new MenuManager("File");
+		MenuManager fileMenu = new MenuManager(ResourcePlugin.getProperty("menu.file"));
 		menuManager.add(fileMenu);
 		
-		IAction materialItemAction = new Action("Material Item"){
+		IAction materialItemAction = new Action(ResourcePlugin.getProperty("menu.new.materialItem")){
 
 			@Override
 			public void run() {
@@ -165,8 +177,30 @@ public class MainUI extends ApplicationWindow {
 			
 		};
 		
-		MenuManager cascadingMenu = new MenuManager("New");
+		IAction auMaterialItemAction = new Action(ResourcePlugin.getProperty("menu.new.auMaterialItem")){
+
+			@Override
+			public void run() {
+				super.run();
+				AuxiliaryMaterialCreationDialog micd = new AuxiliaryMaterialCreationDialog(null);
+				MaterialItem item = new MaterialItem();
+				micd.setMaterialItem(item);
+				int ret = micd.open();
+				
+				if(ret == TitleAreaDialog.OK){
+					item = micd.getMaterialItem();
+					mtrlService.add(item);
+					
+					tableViewer.refresh();
+				}
+
+			}
+			
+		};
+		
+		MenuManager cascadingMenu = new MenuManager(ResourcePlugin.getProperty("menu.new"));
 		cascadingMenu.add(materialItemAction);
+		cascadingMenu.add(auMaterialItemAction);
 		fileMenu.add(cascadingMenu);
 		
 		// Add the actions to the File menu
@@ -258,7 +292,7 @@ public class MainUI extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Budget Management");
+		newShell.setText(ResourcePlugin.getProperty("app.name"));
 	}
 
 	/**
@@ -271,10 +305,13 @@ public class MainUI extends ApplicationWindow {
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
 		//
-		IObservableValue observeBoundsTableObserveWidget = WidgetProperties.bounds().observe(table);
+		IObservableValue observeBoundsTabObserveWidget = WidgetProperties.bounds().observe(tabFolder);
 		IObservableValue observeBoundsContainerObserveWidget = WidgetProperties.bounds().observe(container);
-		bindingContext.bindValue(observeBoundsTableObserveWidget, observeBoundsContainerObserveWidget, null, null);
+		bindingContext.bindValue(observeBoundsTabObserveWidget, observeBoundsContainerObserveWidget, null, null);
 		//
+		
+		//IObservableValue observeBoundsTableObserveWidget = WidgetProperties.bounds().observe(table);
+		//bindingContext.bindValue(observeBoundsTableObserveWidget, observeBoundsContainerObserveWidget, null, null);
 		return bindingContext;
 	}
 }

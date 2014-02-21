@@ -24,19 +24,20 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.beans.PojoProperties;
 
-public class MaterialItemCreationDialog extends TitleAreaDialog {
+public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 	private DataBindingContext m_bindingContext;
 	
 	private MaterialItem materialItem;
 	private Text text;
 	private Text text_1;
 	private Text text_2;
+	private Text text_3;
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public MaterialItemCreationDialog(Shell parentShell) {
+	public AuxiliaryMaterialCreationDialog(Shell parentShell) {
 		super(parentShell);
 		materialItem = new MaterialItem();
 		
@@ -61,19 +62,23 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 		composite_1.setLayoutData(BorderLayout.CENTER);
 		
 		Composite composite = new Composite(composite_1, SWT.NONE);
-		composite.setBounds(0, 0, 155, 282);
+		composite.setBounds(0, 0, 130, 282);
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
 		lblNewLabel.setBounds(25, 30, 90, 15);
-		lblNewLabel.setText(ResourcePlugin.getProperty("material.creationDlg.label.id"));
+		lblNewLabel.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.name"));
 		
 		Label lblNewLabel_1 = new Label(composite, SWT.NONE);
 		lblNewLabel_1.setBounds(25, 80, 90, 15);
-		lblNewLabel_1.setText(ResourcePlugin.getProperty("material.creationDlg.label.name"));
+		lblNewLabel_1.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.price"));
 		
 		Label lblNewLabel_2 = new Label(composite, SWT.NONE);
 		lblNewLabel_2.setBounds(25, 130, 90, 15);
-		lblNewLabel_2.setText(ResourcePlugin.getProperty("material.creationDlg.label.midu"));
+		lblNewLabel_2.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.unit"));
+		
+		Label lblNewLabel_3 = new Label(composite, SWT.NONE);
+		lblNewLabel_3.setBounds(25, 180, 90, 15);
+		lblNewLabel_3.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.brand"));
 		
 		text = new Text(composite_1, SWT.BORDER);
 		text.setBounds(188, 30, 114, 20);
@@ -83,6 +88,9 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 		
 		text_2 = new Text(composite_1, SWT.BORDER);
 		text_2.setBounds(188, 130, 114, 20);
+		
+		text_3 = new Text(composite_1, SWT.BORDER);
+		text_3.setBounds(188, 180, 114, 20);
 		return area;
 	}
 
@@ -116,7 +124,7 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(600, 450);
 	}
 	
 	@Override
@@ -132,7 +140,7 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 		
 		val = text_2.getText();
 		if(!val.equals("")){
-			this.setErrorMessage(ResourcePlugin.getProperty("material.creationDlg.errorMessage"));
+			this.setErrorMessage(ResourcePlugin.getProperty("auMaterial.creationDlg.errorMessage"));
 			
 		}else{
 			super.okPressed();
@@ -143,23 +151,11 @@ public class MaterialItemCreationDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-	    newShell.setText(ResourcePlugin.getProperty("material.creationDlg.shellText"));
+	    newShell.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.shellText"));
 	}
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
-		//
-		IObservableValue itemIdMaterialItemObserveValue = PojoProperties.value("itemId").observe(materialItem);
-		IObservableValue textTextObserveValue = PojoProperties.value("text").observe(text);
-		bindingContext.bindValue(textTextObserveValue, itemIdMaterialItemObserveValue, null, null);
-		//
-		IObservableValue itemNameMaterialItemObserveValue = PojoProperties.value("itemName").observe(materialItem);
-		IObservableValue textText_1ObserveValue = PojoProperties.value("text").observe(text_1);
-		bindingContext.bindValue(textText_1ObserveValue, itemNameMaterialItemObserveValue, null, null);
-		//
-		IObservableValue itemMiduMaterialItemObserveValue = PojoProperties.value("itemMidu").observe(materialItem);
-		IObservableValue textText_2ObserveValue = PojoProperties.value("text").observe(text_2);
-		bindingContext.bindValue(textText_2ObserveValue, itemMiduMaterialItemObserveValue, null, null);
-		//
+
 		return bindingContext;
 	}
 }
