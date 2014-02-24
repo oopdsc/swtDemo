@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class AuxiliaryMaterial {
 	
 	private String itemName;
-	private String itemId;
+	private String itemBrand;
 	private String unit;
 	private BigDecimal price;
 	
@@ -19,12 +19,14 @@ public class AuxiliaryMaterial {
 		this.itemName = itemName;
 	}
 
-	public String getItemId() {
-		return itemId;
+
+
+	public String getItemBrand() {
+		return itemBrand;
 	}
 
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
+	public void setItemBrand(String itemBrand) {
+		this.itemBrand = itemBrand;
 	}
 
 	public String getUnit() {
@@ -41,14 +43,6 @@ public class AuxiliaryMaterial {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
-	}
-
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
 	}
 	
 	

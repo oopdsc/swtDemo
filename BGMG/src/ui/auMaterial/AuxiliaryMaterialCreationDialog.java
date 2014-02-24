@@ -71,7 +71,7 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 		
 		Label lblNewLabel_1 = new Label(composite, SWT.NONE);
 		lblNewLabel_1.setBounds(25, 80, 90, 15);
-		lblNewLabel_1.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.price"));
+		lblNewLabel_1.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.brand"));
 		
 		Label lblNewLabel_2 = new Label(composite, SWT.NONE);
 		lblNewLabel_2.setBounds(25, 130, 90, 15);
@@ -79,7 +79,7 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 		
 		Label lblNewLabel_3 = new Label(composite, SWT.NONE);
 		lblNewLabel_3.setBounds(25, 180, 90, 15);
-		lblNewLabel_3.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.brand"));
+		lblNewLabel_3.setText(ResourcePlugin.getProperty("auMaterial.creationDlg.label.price"));
 		
 		text = new Text(composite_1, SWT.BORDER);
 		text.setBounds(188, 30, 114, 20);
@@ -108,10 +108,6 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 		m_bindingContext = initDataBindings();
 	}
 	
-	
-
-
-
 	public AuxiliaryMaterial getAuxiliaryMaterial() {
 		return auxiliaryMaterial;
 	}
@@ -132,12 +128,18 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 	protected void okPressed() {
 		
 		String val = text.getText();		
-		auxiliaryMaterial.setItemId(val);
+		auxiliaryMaterial.setItemName(val);
 		
 		val = text_1.getText();
-		auxiliaryMaterial.setItemName(val);
+		auxiliaryMaterial.setItemBrand(val);
+		
+		val = text_2.getText();
+		auxiliaryMaterial.setUnit(val);
+		
+		val = text_3.getText();
+		auxiliaryMaterial.setPrice(new BigDecimal(val));
 
-			super.okPressed();
+		super.okPressed();
 		
 	}
 

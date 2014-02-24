@@ -1,11 +1,14 @@
 package ui.auMaterial;
 
 
+import model.material.AuxiliaryMaterial;
 import model.material.MaterialItem;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
+
+import service.AuMaterialService;
 
 public class AuTableViewerLabelProvider implements ITableLabelProvider  {
 
@@ -19,17 +22,21 @@ public class AuTableViewerLabelProvider implements ITableLabelProvider  {
 	@Override
 	public String getColumnText(Object arg0, int arg1) {
 		String retVal = arg0.toString();
-		MaterialItem m1 = (MaterialItem)arg0;
+		AuxiliaryMaterial m1 = (AuxiliaryMaterial)arg0;
 		if(arg1 == 0){
-			retVal = m1.getItemId();
-		}
-		
-		if(arg1 == 1){
 			retVal = m1.getItemName();
 		}
 		
+		if(arg1 == 1){
+			retVal = m1.getItemBrand();
+		}
+		
 		if(arg1 == 2){
-			retVal = m1.getItemMidu().toPlainString();
+			retVal = m1.getUnit();
+		}
+		
+		if(arg1 == 3){
+			retVal = m1.getPrice().toPlainString();
 		}
 		
 		return retVal;

@@ -20,7 +20,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import service.AuMaterialService;
 import service.MaterialService;
+import ui.auMaterial.AuMaterialTableViewer;
 import ui.auMaterial.AuxiliaryMaterialCreationDialog;
 import ui.material.MaterialItemCreationDialog;
 import ui.material.MaterialTableViewer;
@@ -35,7 +37,11 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 public class MainUI extends ApplicationWindow {
 	private DataBindingContext m_bindingContext;
 	private TableViewer tableViewer;
+	
+	private TableViewer auTableViewer;
+	
 	private MaterialService mtrlService;
+	private AuMaterialService auMaterialService;
 	private CTabFolder tabFolder;
 	private Composite container;
 
@@ -46,6 +52,7 @@ public class MainUI extends ApplicationWindow {
 		super(null);	
 		
 		mtrlService = new MaterialService();
+		auMaterialService = new AuMaterialService();
 		
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
@@ -68,11 +75,20 @@ public class MainUI extends ApplicationWindow {
 		
 		tableViewer = new MaterialTableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
 		
-		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.CLOSE);
+		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NULL); 	//as no open function, so can not close
 		tbtmNewItem.setText(ResourcePlugin.getProperty("material.list.tabName"));
 		tbtmNewItem.setControl(tableViewer.getTable());
 		
 		tableViewer.setInput(mtrlService.getAllRecords());
+		
+		
+		auTableViewer= new AuMaterialTableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+		
+		CTabItem tbtmNewItem2 = new CTabItem(tabFolder, SWT.NULL);
+		tbtmNewItem2.setText(ResourcePlugin.getProperty("auMaterial.list.tabName"));
+		tbtmNewItem2.setControl(auTableViewer.getTable());
+		
+		auTableViewer.setInput(auMaterialService.getAllRecords());
 		
 		m_bindingContext = initDataBindings();
 		
@@ -131,9 +147,9 @@ public class MainUI extends ApplicationWindow {
 				
 				if(ret == TitleAreaDialog.OK){
 					item = micd.getAuxiliaryMaterial();
-					//mtrlService.add(item);
+					auMaterialService.add(item);
 					
-					tableViewer.refresh();
+					auTableViewer.refresh();
 				}
 
 			}

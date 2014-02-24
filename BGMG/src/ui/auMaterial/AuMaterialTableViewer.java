@@ -45,18 +45,23 @@ public class AuMaterialTableViewer extends TableViewer {
 		
 		TableViewerColumn valueColumn = new TableViewerColumn(this,
                 SWT.CENTER);
-        valueColumn.getColumn().setText(ResourcePlugin.getProperty("material.table.column.id"));
+        valueColumn.getColumn().setText(ResourcePlugin.getProperty("auMaterial.table.column.name"));
         valueColumn.getColumn().setWidth(150);
         
 		TableViewerColumn valueColumn2 = new TableViewerColumn(this,
                 SWT.CENTER);
-        valueColumn2.getColumn().setText(ResourcePlugin.getProperty("material.table.column.name"));
+        valueColumn2.getColumn().setText(ResourcePlugin.getProperty("auMaterial.table.column.brand"));
         valueColumn2.getColumn().setWidth(300);
         
 		TableViewerColumn valueColumn3 = new TableViewerColumn(this,
                 SWT.CENTER);
-        valueColumn3.getColumn().setText(ResourcePlugin.getProperty("material.table.column.midu"));
+        valueColumn3.getColumn().setText(ResourcePlugin.getProperty("auMaterial.table.column.unit"));
         valueColumn3.getColumn().setWidth(80);
+        
+		TableViewerColumn valueColumn4 = new TableViewerColumn(this,
+                SWT.CENTER);
+        valueColumn4.getColumn().setText(ResourcePlugin.getProperty("auMaterial.table.column.price"));
+        valueColumn4.getColumn().setWidth(80);
 		
 		this.setContentProvider(new AuContentProvider());
 		
