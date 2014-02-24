@@ -1,9 +1,10 @@
-package ui.material;
+package ui.auMaterial;
 
 import helper.ResourcePlugin;
 
 import java.math.BigDecimal;
 
+import model.material.AuxiliaryMaterial;
 import model.material.MaterialItem;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -27,7 +28,7 @@ import org.eclipse.core.databinding.beans.PojoProperties;
 public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 	private DataBindingContext m_bindingContext;
 	
-	private MaterialItem materialItem;
+	private AuxiliaryMaterial auxiliaryMaterial;
 	private Text text;
 	private Text text_1;
 	private Text text_2;
@@ -39,7 +40,7 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 	 */
 	public AuxiliaryMaterialCreationDialog(Shell parentShell) {
 		super(parentShell);
-		materialItem = new MaterialItem();
+		auxiliaryMaterial = new AuxiliaryMaterial();
 		
 		//setMessage("Wizard Page description");
 	}
@@ -109,14 +110,14 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 	
 	
 
-	public MaterialItem getMaterialItem() {
-		return materialItem;
-	}
-	
-	
 
-	public void setMaterialItem(MaterialItem materialItem) {
-		this.materialItem = materialItem;
+
+	public AuxiliaryMaterial getAuxiliaryMaterial() {
+		return auxiliaryMaterial;
+	}
+
+	public void setAuxiliaryMaterial(AuxiliaryMaterial auxiliaryMaterial) {
+		this.auxiliaryMaterial = auxiliaryMaterial;
 	}
 
 	/**
@@ -131,20 +132,12 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 	protected void okPressed() {
 		
 		String val = text.getText();		
-		materialItem.setItemId(val);
+		auxiliaryMaterial.setItemId(val);
 		
 		val = text_1.getText();
-		materialItem.setItemName(val);
-		
-		materialItem.setItemMidu(new BigDecimal("0"));
-		
-		val = text_2.getText();
-		if(!val.equals("")){
-			this.setErrorMessage(ResourcePlugin.getProperty("auMaterial.creationDlg.errorMessage"));
-			
-		}else{
+		auxiliaryMaterial.setItemName(val);
+
 			super.okPressed();
-		}
 		
 	}
 
@@ -158,4 +151,5 @@ public class AuxiliaryMaterialCreationDialog extends TitleAreaDialog {
 
 		return bindingContext;
 	}
+
 }

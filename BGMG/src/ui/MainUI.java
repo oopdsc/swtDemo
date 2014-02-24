@@ -1,9 +1,7 @@
 package ui;
 
-import helper.ContentProvider;
-import helper.MyActionGroup;
 import helper.ResourcePlugin;
-import helper.TableViewerLabelProvider;
+import model.material.AuxiliaryMaterial;
 import model.material.MaterialItem;
 
 import org.eclipse.jface.action.Action;
@@ -11,7 +9,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
@@ -24,16 +21,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import service.MaterialService;
-import ui.material.AuxiliaryMaterialCreationDialog;
+import ui.auMaterial.AuxiliaryMaterialCreationDialog;
 import ui.material.MaterialItemCreationDialog;
+import ui.material.MaterialTableViewer;
 
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.internal.WorkbenchPlugin;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -44,7 +36,6 @@ public class MainUI extends ApplicationWindow {
 	private DataBindingContext m_bindingContext;
 	private TableViewer tableViewer;
 	private MaterialService mtrlService;
-	private Table table;
 	private CTabFolder tabFolder;
 	private Composite container;
 
@@ -75,62 +66,13 @@ public class MainUI extends ApplicationWindow {
 		tabFolder.setBounds(0, 0, 434, 189);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
-		tableViewer = new TableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
-		table = tableViewer.getTable();
+		tableViewer = new MaterialTableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
 		
 		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.CLOSE);
 		tbtmNewItem.setText(ResourcePlugin.getProperty("material.list.tabName"));
-		tbtmNewItem.setControl(table);
-				
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		table.setBounds(0, 0, 100, 100);		
-		
-		TableViewerColumn valueColumn = new TableViewerColumn(tableViewer,
-                SWT.CENTER);
-        valueColumn.getColumn().setText(ResourcePlugin.getProperty("material.table.column.id"));
-        valueColumn.getColumn().setWidth(150);
-        
-		TableViewerColumn valueColumn2 = new TableViewerColumn(tableViewer,
-                SWT.CENTER);
-        valueColumn2.getColumn().setText(ResourcePlugin.getProperty("material.table.column.name"));
-        valueColumn2.getColumn().setWidth(300);
-        
-		TableViewerColumn valueColumn3 = new TableViewerColumn(tableViewer,
-                SWT.CENTER);
-        valueColumn3.getColumn().setText(ResourcePlugin.getProperty("material.table.column.midu"));
-        valueColumn3.getColumn().setWidth(80);
-		
-		tableViewer.setContentProvider(new ContentProvider());
+		tbtmNewItem.setControl(tableViewer.getTable());
 		
 		tableViewer.setInput(mtrlService.getAllRecords());
-
-		tableViewer.setLabelProvider(new TableViewerLabelProvider());
-		
-		tableViewer.addDoubleClickListener(new IDoubleClickListener(){
-
-			@Override
-			public void doubleClick(DoubleClickEvent arg0) {
-				IStructuredSelection selection = (IStructuredSelection) arg0.getSelection();
-								
-				MaterialItemCreationDialog micd = new MaterialItemCreationDialog(null);
-				MaterialItem item = (MaterialItem)selection.getFirstElement();
-				micd.setMaterialItem(item);
-				int ret = micd.open();
-				
-				if(ret == TitleAreaDialog.OK){
-					item = micd.getMaterialItem();
-					
-					MessageDialog.openInformation(null, "Alert", item.getItemName());
-				}
-
-			}
-			
-		});
-		
-		MyActionGroup actionGroup = new MyActionGroup(tableViewer);  
-
-		actionGroup.fillContextMenu(new MenuManager());		
 		
 		m_bindingContext = initDataBindings();
 		
@@ -183,13 +125,13 @@ public class MainUI extends ApplicationWindow {
 			public void run() {
 				super.run();
 				AuxiliaryMaterialCreationDialog micd = new AuxiliaryMaterialCreationDialog(null);
-				MaterialItem item = new MaterialItem();
-				micd.setMaterialItem(item);
+				AuxiliaryMaterial item = new AuxiliaryMaterial();
+				micd.setAuxiliaryMaterial(item);
 				int ret = micd.open();
 				
 				if(ret == TitleAreaDialog.OK){
-					item = micd.getMaterialItem();
-					mtrlService.add(item);
+					item = micd.getAuxiliaryMaterial();
+					//mtrlService.add(item);
 					
 					tableViewer.refresh();
 				}

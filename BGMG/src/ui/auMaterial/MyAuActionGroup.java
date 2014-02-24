@@ -1,5 +1,7 @@
-package helper;
+package ui.auMaterial;
 
+import helper.ResourcePlugin;
+import model.material.AuxiliaryMaterial;
 import model.material.MaterialItem;
 
 import org.eclipse.jface.action.Action;
@@ -13,13 +15,11 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.actions.ActionGroup;
 
-import ui.material.MaterialItemCreationDialog;
-
-public class MyActionGroup extends ActionGroup {
+public class MyAuActionGroup extends ActionGroup {
 
 	private TableViewer tv;
 
-	public MyActionGroup(TableViewer tv) {
+	public MyAuActionGroup(TableViewer tv) {
 
 		this.tv = tv;
 
@@ -43,7 +43,7 @@ public class MyActionGroup extends ActionGroup {
 	private class OpenAction extends Action {
 
 		public OpenAction() {
-			setText("打开");
+			setText(ResourcePlugin.getProperty("auMaterial.creationDlg.menu.open"));
 		}
 
 		public void run() {
@@ -52,7 +52,7 @@ public class MyActionGroup extends ActionGroup {
 
 			(IStructuredSelection) tv.getSelection();
 
-			MaterialItem o = (MaterialItem)selection.getFirstElement();
+			AuxiliaryMaterial o = (AuxiliaryMaterial)selection.getFirstElement();
 
 			if (o == null){
 
@@ -60,12 +60,12 @@ public class MyActionGroup extends ActionGroup {
 
 			}else{
 
-				MaterialItemCreationDialog micd = new MaterialItemCreationDialog(null);
-				micd.setMaterialItem(o);
+				AuxiliaryMaterialCreationDialog micd = new AuxiliaryMaterialCreationDialog(null);
+				micd.setAuxiliaryMaterial(o);
 				int ret = micd.open();
 				
 				if(ret == TitleAreaDialog.OK){
-					o = micd.getMaterialItem();
+					o = micd.getAuxiliaryMaterial();
 					tv.refresh();
 				}
 			}
@@ -76,7 +76,7 @@ public class MyActionGroup extends ActionGroup {
 	private class RefreshAction extends Action {
 
 		public RefreshAction() {
-			setText("刷新");
+			setText(ResourcePlugin.getProperty("auMaterial.creationDlg.menu.refresh"));
 		}
 
 		public void run() {

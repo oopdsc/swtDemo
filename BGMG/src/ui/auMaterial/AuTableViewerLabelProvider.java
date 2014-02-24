@@ -1,4 +1,4 @@
-package helper;
+package ui.auMaterial;
 
 
 import model.material.MaterialItem;
@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class TableViewerLabelProvider implements ITableLabelProvider  {
+public class AuTableViewerLabelProvider implements ITableLabelProvider  {
 
 
 	@Override
