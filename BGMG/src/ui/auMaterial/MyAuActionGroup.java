@@ -2,8 +2,6 @@ package ui.auMaterial;
 
 import helper.ResourcePlugin;
 import model.material.AuxiliaryMaterial;
-import model.material.MaterialItem;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -56,7 +54,7 @@ public class MyAuActionGroup extends ActionGroup {
 
 			if (o == null){
 
-				MessageDialog.openInformation(null, null, "请先选择记录");
+				MessageDialog.openInformation(null, null, ResourcePlugin.getProperty("auMaterial.creationDlg.message.noRecord"));
 
 			}else{
 

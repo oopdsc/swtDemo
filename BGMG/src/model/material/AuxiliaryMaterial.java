@@ -8,8 +8,6 @@ public class AuxiliaryMaterial {
 	private String itemBrand;
 	private String unit;
 	private BigDecimal price;
-	
-	private String brand;
 
 	public String getItemName() {
 		return itemName;

@@ -2,7 +2,6 @@ package ui.auMaterial;
 
 import helper.ResourcePlugin;
 import model.material.AuxiliaryMaterial;
-import model.material.MaterialItem;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;

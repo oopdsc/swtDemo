@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.material.AuxiliaryMaterial;
-import model.material.MaterialItem;
 
 public class AuMaterialService {
 	

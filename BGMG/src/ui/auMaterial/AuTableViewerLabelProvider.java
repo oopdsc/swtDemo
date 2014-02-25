@@ -2,13 +2,10 @@ package ui.auMaterial;
 
 
 import model.material.AuxiliaryMaterial;
-import model.material.MaterialItem;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
-
-import service.AuMaterialService;
 
 public class AuTableViewerLabelProvider implements ITableLabelProvider  {
 
