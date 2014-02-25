@@ -1,4 +1,4 @@
-package model.material;
+package model.auMaterial;
 
 import java.math.BigDecimal;
 

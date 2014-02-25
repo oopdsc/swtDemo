@@ -1,7 +1,8 @@
 package ui.auMaterial;
 
 import helper.ResourcePlugin;
-import model.material.AuxiliaryMaterial;
+import model.auMaterial.AuxiliaryMaterial;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;

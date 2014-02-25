@@ -1,7 +1,7 @@
 package ui.auMaterial;
 
 
-import model.material.AuxiliaryMaterial;
+import model.auMaterial.AuxiliaryMaterial;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;

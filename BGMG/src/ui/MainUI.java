@@ -1,7 +1,7 @@
 package ui;
 
 import helper.ResourcePlugin;
-import model.material.AuxiliaryMaterial;
+import model.auMaterial.AuxiliaryMaterial;
 import model.material.MaterialItem;
 
 import org.eclipse.jface.action.Action;
@@ -14,20 +14,27 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tree;
 
 import service.AuMaterialService;
 import service.MaterialService;
+import service.WindowService;
 import ui.auMaterial.AuMaterialTableViewer;
 import ui.auMaterial.AuxiliaryMaterialCreationDialog;
 import ui.material.MaterialItemCreationDialog;
 import ui.material.MaterialTableViewer;
+import ui.window.WindowTreeView;
 
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -42,6 +49,9 @@ public class MainUI extends ApplicationWindow {
 	
 	private MaterialService mtrlService;
 	private AuMaterialService auMaterialService;
+	
+	private WindowService windowService;
+	
 	private CTabFolder tabFolder;
 	private Composite container;
 
@@ -53,6 +63,7 @@ public class MainUI extends ApplicationWindow {
 		
 		mtrlService = new MaterialService();
 		auMaterialService = new AuMaterialService();
+		windowService = new WindowService();
 		
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
@@ -89,6 +100,30 @@ public class MainUI extends ApplicationWindow {
 		tbtmNewItem2.setControl(auTableViewer.getTable());
 		
 		auTableViewer.setInput(auMaterialService.getAllRecords());
+		
+		
+		CTabItem tbtmNewItem3 = new CTabItem(tabFolder, SWT.NULL);
+		tbtmNewItem3.setText(ResourcePlugin.getProperty("window.list.tabName"));
+		SashForm sashForm = new SashForm(tabFolder, SWT.HORIZONTAL);
+		sashForm.setLayoutData(swing2swt.layout.BorderLayout.CENTER);
+		
+		Composite composite = new Composite(sashForm, SWT.BORDER);
+		
+		TreeViewer treeViewer = new WindowTreeView(composite, SWT.BORDER);
+		Tree tree = treeViewer.getTree();
+		tree.setBounds(0, 0, 115, 182);
+		treeViewer.setInput(windowService.getNode());
+		
+		Composite composite2 = new Composite(sashForm, SWT.BORDER);
+		
+		Button btnRadioButton = new Button(composite2, SWT.RADIO);
+		btnRadioButton.setBounds(10, 40, 97, 17);
+		btnRadioButton.setText("Radio Button");
+		sashForm.setWeights(new int[] {119, 312});
+		
+
+		tbtmNewItem3.setControl(sashForm);
+		
 		
 		m_bindingContext = initDataBindings();
 		
