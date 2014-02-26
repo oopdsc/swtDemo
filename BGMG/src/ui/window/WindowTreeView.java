@@ -1,12 +1,13 @@
 package ui.window;
 
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
-public class WindowTreeView extends TreeViewer {
-	
-	
+import ui.material.MyActionGroup;
+
+public class WindowTreeView extends TreeViewer {		
 
 	public WindowTreeView(Composite parent) {
 		super(parent);
@@ -24,7 +25,12 @@ public class WindowTreeView extends TreeViewer {
 	}
 	
 	protected void fun1(){
+
 		this.setContentProvider(new WindowContentProvider());
 		this.setLabelProvider(new WindowTreeLabelProvider());
+		
+		MyTreeActionGroup actionGroup = new MyTreeActionGroup(this);  
+
+		actionGroup.fillContextMenu(new MenuManager());
 	}
 }

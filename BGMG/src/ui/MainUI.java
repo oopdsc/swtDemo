@@ -47,6 +47,10 @@ public class MainUI extends ApplicationWindow {
 	
 	private TableViewer auTableViewer;
 	
+	private Tree tree;
+	private Composite composite;
+	private TreeViewer treeViewer;
+	
 	private MaterialService mtrlService;
 	private AuMaterialService auMaterialService;
 	
@@ -107,10 +111,10 @@ public class MainUI extends ApplicationWindow {
 		SashForm sashForm = new SashForm(tabFolder, SWT.HORIZONTAL);
 		sashForm.setLayoutData(swing2swt.layout.BorderLayout.CENTER);
 		
-		Composite composite = new Composite(sashForm, SWT.BORDER);
+		composite = new Composite(sashForm, SWT.BORDER);
 		
-		TreeViewer treeViewer = new WindowTreeView(composite, SWT.BORDER);
-		Tree tree = treeViewer.getTree();
+		treeViewer = new WindowTreeView(composite, SWT.BORDER);
+		tree = treeViewer.getTree();
 		tree.setBounds(0, 0, 115, 182);
 		treeViewer.setInput(windowService.getNode());
 		
@@ -301,6 +305,10 @@ public class MainUI extends ApplicationWindow {
 		IObservableValue observeBoundsTabObserveWidget = WidgetProperties.bounds().observe(tabFolder);
 		IObservableValue observeBoundsContainerObserveWidget = WidgetProperties.bounds().observe(container);
 		bindingContext.bindValue(observeBoundsTabObserveWidget, observeBoundsContainerObserveWidget, null, null);
+		
+		IObservableValue observeBoundsTreeViewerObserveWidget = WidgetProperties.bounds().observe(tree);
+		IObservableValue observeBoundsCompositeObserveWidget = WidgetProperties.bounds().observe(composite);
+		bindingContext.bindValue(observeBoundsTreeViewerObserveWidget, observeBoundsCompositeObserveWidget, null, null);
 		//
 		
 		//IObservableValue observeBoundsTableObserveWidget = WidgetProperties.bounds().observe(table);
