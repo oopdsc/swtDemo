@@ -15,22 +15,28 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
+import service.AppContext;
+
 public class AuMaterialTableViewer extends TableViewer {
 	
 	private Table table;
+	private AppContext context;
 
-	public AuMaterialTableViewer(Composite parent) {
+	public AuMaterialTableViewer(Composite parent, AppContext context) {
 		super(parent);
+		this.context = context;
 		fun1();
 	}
 
-	public AuMaterialTableViewer(Composite parent, int style) {
+	public AuMaterialTableViewer(Composite parent, int style, AppContext context) {
 		super(parent, style);
+		this.context = context;
 		fun1();
 	}
 
-	public AuMaterialTableViewer(Table table) {
+	public AuMaterialTableViewer(Table table, AppContext context) {
 		super(table);
+		this.context = context;
 		fun1();
 	}
 	
@@ -87,7 +93,7 @@ public class AuMaterialTableViewer extends TableViewer {
 			
 		});
 		
-		MyAuActionGroup actionGroup = new MyAuActionGroup(this);  
+		MyAuActionGroup actionGroup = new MyAuActionGroup(this, context);  
 
 		actionGroup.fillContextMenu(new MenuManager());
 	}

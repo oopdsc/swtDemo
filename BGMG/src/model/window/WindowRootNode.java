@@ -4,30 +4,34 @@ import helper.ResourcePlugin;
 
 import java.util.List;
 
-public class WindowRootNode extends WindowTreeNode {
+public class WindowRootNode{
 	
 	private String nodeName = "";
-	private List<WindowTreeNode> children;
+	private List<WindowItem> children;
 	
 	public WindowRootNode(){
 		nodeName = ResourcePlugin.getProperty("window.tree.rootNode.name");
 	}
 
-	@Override
-	public String getName() {
+	public String getNodeName() {
 		return nodeName;
 	}
 
-	@Override
-	public void setChildren(List<WindowTreeNode> Children) {
-		System.out.println(Children.get(0).getName());
-		children = Children;
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
 	}
 
-	@Override
-	public List<WindowTreeNode> getChildren() {
-		//System.out.println(children);
+	public List<WindowItem> getChildren() {
 		return children;
 	}
+
+	public void setChildren(List<WindowItem> children) {
+		this.children = children;
+	}
+
+	public void addChild(WindowItem item){
+		this.children.add(item);
+	}
+
 
 }

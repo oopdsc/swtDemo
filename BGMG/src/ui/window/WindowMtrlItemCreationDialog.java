@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 
 import model.material.MaterialItem;
 import model.window.WindowItem;
+import model.window.WindowMaterialItem;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -33,19 +35,23 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 
-public class WindowItemCreationDialog extends TitleAreaDialog {
+public class WindowMtrlItemCreationDialog extends TitleAreaDialog {
 	private DataBindingContext m_bindingContext;
-	private AppContext context;
+
 	private Text text;
-	private Text text_1;
+	private AppContext context;
+	
+	private WindowItem item;
+	private MaterialItem mtrlItem;
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public WindowItemCreationDialog(Shell parentShell, AppContext context) {
+	public WindowMtrlItemCreationDialog(Shell parentShell, AppContext context, WindowItem item) {
 		super(parentShell);
 		this.context = context;
+		this.item = item;
 		//setMessage("Wizard Page description");
 	}
 
@@ -70,18 +76,65 @@ public class WindowItemCreationDialog extends TitleAreaDialog {
 		composite.setBounds(0, 0, 155, 282);
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setBounds(25, 29, 90, 15);
+		lblNewLabel.setBounds(25, 30, 90, 15);
 		lblNewLabel.setText("材料名称");
 		
 		Label lblNewLabel_1 = new Label(composite, SWT.NONE);
-		lblNewLabel_1.setBounds(25, 78, 55, 15);
-		lblNewLabel_1.setText("编号");
+		lblNewLabel_1.setBounds(25, 64, 90, 15);
+		lblNewLabel_1.setText("材料编号");
+		
+		Label lblNewLabel_2 = new Label(composite, SWT.NONE);
+		lblNewLabel_2.setBounds(25, 96, 90, 15);
+		lblNewLabel_2.setText(ResourcePlugin.getProperty("material.creationDlg.label.midu"));
+		
+		Label lblNewLabel_5 = new Label(composite, SWT.NONE);
+		lblNewLabel_5.setBounds(25, 129, 55, 15);
+		lblNewLabel_5.setText("计算公式");
+		
+		ComboViewer comboViewer = new ComboViewer(composite_1, SWT.NONE);
+
+		
+		Combo combo = comboViewer.getCombo();
+		combo.setBounds(183, 27, 88, 23);
+		
+		final Label lblNewLabel_3 = new Label(composite_1, SWT.NONE);
+		lblNewLabel_3.setBounds(183, 63, 55, 15);
+		
+		final Label lblNewLabel_4 = new Label(composite_1, SWT.NONE);
+		lblNewLabel_4.setBounds(183, 96, 55, 15);
 		
 		text = new Text(composite_1, SWT.BORDER);
-		text.setBounds(182, 27, 73, 21);
+		text.setBounds(183, 122, 185, 21);
 		
-		text_1 = new Text(composite_1, SWT.BORDER);
-		text_1.setBounds(182, 77, 73, 21);
+		comboViewer.setContentProvider(new ArrayContentProvider());
+		comboViewer.addPostSelectionChangedListener(new ISelectionChangedListener(){
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent arg0) {
+		
+				IStructuredSelection sele = (IStructuredSelection)arg0.getSelection();
+				MaterialItem mtrl = (MaterialItem)sele.getFirstElement();
+				lblNewLabel_3.setText(mtrl.getItemId());
+				lblNewLabel_4.setText(mtrl.getItemMidu().toPlainString());
+				
+				mtrlItem = mtrl;
+				
+			}
+			
+		});
+		
+		//				MaterialItem 
+		
+		comboViewer.setLabelProvider(new LabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+				MaterialItem mtrl = (MaterialItem)element;
+				return mtrl.getItemName();
+			}
+			
+		});
+		comboViewer.setInput(context.getMtrlService().getAllRecords());
 		
 		
 		return area;
@@ -99,8 +152,6 @@ public class WindowItemCreationDialog extends TitleAreaDialog {
 				IDialogConstants.CANCEL_LABEL, false);
 		m_bindingContext = initDataBindings();
 	}
-	
-
 	/**
 	 * Return the initial size of the dialog.
 	 */
@@ -111,17 +162,16 @@ public class WindowItemCreationDialog extends TitleAreaDialog {
 	
 	@Override
 	protected void okPressed() {
-		String name = text.getText();
 		
-		String id = text_1.getText();
-		
-		WindowItem item = new WindowItem();
-		item.setId(id);
-		item.setName(name);
-		
-		context.getWindowService().addWindowItem(item);
-		
-		super.okPressed();
+		if(mtrlItem == null){
+			MessageDialog.openInformation(null, null, "请先选择材料");
+		}else{
+			WindowMaterialItem tempitem = new WindowMaterialItem(mtrlItem);
+			
+			this.item.addItem(tempitem);
+			super.okPressed();
+		}
+				
 	}
 
 	@Override

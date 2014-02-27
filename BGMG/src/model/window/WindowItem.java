@@ -3,11 +3,11 @@ package model.window;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WindowItem extends WindowTreeNode{
+public class WindowItem{
 	
 	private String id;
 	private String name;
-	private List items = new ArrayList();
+	private List<WindowMaterialItem> items = new ArrayList<WindowMaterialItem>();
 	public String getId() {
 		return id;
 	}
@@ -20,17 +20,14 @@ public class WindowItem extends WindowTreeNode{
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
-	public void setChildren(List<WindowTreeNode> Children) {
-		items = Children;
-		
-	}
-	@Override
-	public List<WindowTreeNode> getChildren() {
+	public List<WindowMaterialItem> getItems() {
 		return items;
 	}
+	public void setItems(List<WindowMaterialItem> items) {
+		this.items = items;
+	}
 	
-	
-
+	public void addItem(WindowMaterialItem item){
+		items.add(item);
+	}
 }

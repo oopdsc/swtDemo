@@ -14,19 +14,27 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.actions.ActionGroup;
 
+import service.AppContext;
+
 public class MyAuActionGroup extends ActionGroup {
 
 	private TableViewer tv;
+	
+	private AppContext context;
 
-	public MyAuActionGroup(TableViewer tv) {
+	public MyAuActionGroup(TableViewer tv, AppContext context) {
+		super();
 
 		this.tv = tv;
+		this.context = context;
 
 	}
 
 	public void fillContextMenu(IMenuManager mgr) {
 
 		MenuManager menuManager = (MenuManager) mgr;
+		
+		menuManager.add(new NewAction());
 
 		menuManager.add(new OpenAction());
 
@@ -81,6 +89,31 @@ public class MyAuActionGroup extends ActionGroup {
 		public void run() {
 
 			tv.refresh();
+
+		}
+
+	}
+	
+	private class NewAction extends Action {
+
+		public NewAction() {
+			setText(ResourcePlugin.getProperty("auMaterial.creationDlg.menu.add"));
+		}
+
+		public void run() {
+
+			super.run();
+			AuxiliaryMaterialCreationDialog micd = new AuxiliaryMaterialCreationDialog(null);
+			AuxiliaryMaterial item = new AuxiliaryMaterial();
+			micd.setAuxiliaryMaterial(item);
+			int ret = micd.open();
+			
+			if(ret == TitleAreaDialog.OK){
+				item = micd.getAuxiliaryMaterial();
+				context.getAuMaterialService().add(item);
+				
+				tv.refresh();
+			}
 
 		}
 

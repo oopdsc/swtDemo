@@ -2,6 +2,7 @@ package ui.window;
 
 import java.util.List;
 
+import model.window.WindowItem;
 import model.window.WindowRootNode;
 import model.window.WindowTreeNode;
 
@@ -9,8 +10,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-public class WindowContentProvider implements IStructuredContentProvider,
-		ITreeContentProvider {
+public class WindowContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
@@ -26,13 +26,18 @@ public class WindowContentProvider implements IStructuredContentProvider,
 
 	@Override
 	public Object[] getChildren(Object arg0) {
-		WindowTreeNode node = (WindowTreeNode) arg0;
-		List list = node.getChildren();
+		if (arg0 instanceof List)
+			return ((List<?>) arg0).toArray();
+		if (arg0 instanceof WindowRootNode)
+			return ((WindowRootNode) arg0).getChildren().toArray();
+		if (arg0 instanceof WindowItem)
+			return ((WindowItem) arg0).getItems().toArray();
+		return new Object[0];
+	}
 
-		if (list == null) {
-			return new Object[0];
-		}
-		return list.toArray();
+	@Override
+	public Object[] getElements(Object arg0) {
+		return getChildren(arg0);
 	}
 
 	@Override
@@ -43,17 +48,15 @@ public class WindowContentProvider implements IStructuredContentProvider,
 
 	@Override
 	public boolean hasChildren(Object arg0) {
-		WindowTreeNode node = (WindowTreeNode) arg0;
-		List list = node.getChildren();
-		return !(list == null || list.isEmpty());
+		if (arg0 instanceof List)
+			return ((List<?>) arg0).toArray().length > 0;
+		if (arg0 instanceof WindowRootNode)
+			return ((WindowRootNode) arg0).getChildren().size() > 0;
+		if (arg0 instanceof WindowItem)
+			return ((WindowItem) arg0).getItems().size() > 0;
+		return false;
 	}
 
-	@Override
-	public Object[] getElements(Object arg0) {
-		if(arg0 instanceof List){
-			return ((List) arg0).toArray();
-		}
-		return new Object[0];
-	}
+
 
 }

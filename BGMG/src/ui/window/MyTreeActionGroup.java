@@ -1,6 +1,7 @@
 package ui.window;
 
 import model.material.MaterialItem;
+import model.window.WindowItem;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
@@ -14,14 +15,17 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.actions.ActionGroup;
 
+import service.AppContext;
+
 public class MyTreeActionGroup extends ActionGroup {
 
 	private TreeViewer tv;
+	private AppContext context;
 
-	public MyTreeActionGroup(TreeViewer tv) {
+	public MyTreeActionGroup(TreeViewer tv, AppContext context) {
 
 		this.tv = tv;
-
+		this.context = context;
 	}
 
 	public void fillContextMenu(IMenuManager mgr) {
@@ -33,6 +37,8 @@ public class MyTreeActionGroup extends ActionGroup {
 		menuManager.add(new RefreshAction());
 		
 		menuManager.add(new AddAction());
+		
+		menuManager.add(new AddMtrlAction());
 
 		Tree tree = tv.getTree();
 		
@@ -76,8 +82,42 @@ public class MyTreeActionGroup extends ActionGroup {
 
 		public void run() {
 
-			WindowItemCreationDialog wicd = new WindowItemCreationDialog(null);
+			WindowItemCreationDialog wicd = new WindowItemCreationDialog(null, context);
 			wicd.open();
+		}
+
+	}
+	
+	private class AddMtrlAction extends Action {
+
+		public AddMtrlAction() {
+			setText("添加材料");
+		}
+
+		public void run() {
+
+			IStructuredSelection selection =
+
+			(IStructuredSelection) tv.getSelection();
+
+			Object o = selection.getFirstElement();
+
+			if (o == null){
+
+				MessageDialog.openInformation(null, null, "请先选择窗体材料");
+
+			}else{
+				if( o instanceof WindowItem){
+					
+					WindowMtrlItemCreationDialog wmcd = new WindowMtrlItemCreationDialog(null, context, (WindowItem)o);
+					
+					wmcd.open();
+				}else{
+					MessageDialog.openInformation(null, null, "请先选择窗体材料");
+				}
+				
+				//MessageDialog.openInformation(null, null, o.toString());
+			}
 		}
 
 	}
@@ -95,4 +135,4 @@ public class MyTreeActionGroup extends ActionGroup {
 		}
 
 	}
-	}
+}

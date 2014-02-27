@@ -5,22 +5,28 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
+import service.AppContext;
 import ui.material.MyActionGroup;
 
-public class WindowTreeView extends TreeViewer {		
+public class WindowTreeView extends TreeViewer {	
+	
+	private AppContext context;
 
-	public WindowTreeView(Composite parent) {
+	public WindowTreeView(Composite parent, AppContext context) {
 		super(parent);
+		this.context = context;
 		fun1();
 	}
 
-	public WindowTreeView(Composite parent, int style) {
+	public WindowTreeView(Composite parent, int style, AppContext context) {
 		super(parent, style);
+		this.context = context;
 		fun1();
 	}
 
-	public WindowTreeView(Tree tree) {
+	public WindowTreeView(Tree tree, AppContext context) {
 		super(tree);
+		this.context = context;
 		fun1();
 	}
 	
@@ -29,7 +35,7 @@ public class WindowTreeView extends TreeViewer {
 		this.setContentProvider(new WindowContentProvider());
 		this.setLabelProvider(new WindowTreeLabelProvider());
 		
-		MyTreeActionGroup actionGroup = new MyTreeActionGroup(this);  
+		MyTreeActionGroup actionGroup = new MyTreeActionGroup(this, context);  
 
 		actionGroup.fillContextMenu(new MenuManager());
 	}

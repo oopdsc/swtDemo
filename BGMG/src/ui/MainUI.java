@@ -22,7 +22,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 
+import service.AppContext;
 import service.AuMaterialService;
 import service.MaterialService;
 import service.WindowService;
@@ -51,10 +53,7 @@ public class MainUI extends ApplicationWindow {
 	private Composite composite;
 	private TreeViewer treeViewer;
 	
-	private MaterialService mtrlService;
-	private AuMaterialService auMaterialService;
-	
-	private WindowService windowService;
+	private AppContext context;
 	
 	private CTabFolder tabFolder;
 	private Composite container;
@@ -63,11 +62,9 @@ public class MainUI extends ApplicationWindow {
 	 * Create the application window.
 	 */
 	public MainUI() {
-		super(null);	
+		super(null);
 		
-		mtrlService = new MaterialService();
-		auMaterialService = new AuMaterialService();
-		windowService = new WindowService();
+		context = new AppContext();
 		
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
@@ -94,39 +91,58 @@ public class MainUI extends ApplicationWindow {
 		tbtmNewItem.setText(ResourcePlugin.getProperty("material.list.tabName"));
 		tbtmNewItem.setControl(tableViewer.getTable());
 		
-		tableViewer.setInput(mtrlService.getAllRecords());
+		tableViewer.setInput(context.getMtrlService().getAllRecords());
 		
 		
-		auTableViewer= new AuMaterialTableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+		auTableViewer= new AuMaterialTableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION, context);
 		
 		CTabItem tbtmNewItem2 = new CTabItem(tabFolder, SWT.NULL);
 		tbtmNewItem2.setText(ResourcePlugin.getProperty("auMaterial.list.tabName"));
 		tbtmNewItem2.setControl(auTableViewer.getTable());
 		
-		auTableViewer.setInput(auMaterialService.getAllRecords());
+		auTableViewer.setInput(context.getAuMaterialService().getAllRecords());
 		
 		
 		CTabItem tbtmNewItem3 = new CTabItem(tabFolder, SWT.NULL);
 		tbtmNewItem3.setText(ResourcePlugin.getProperty("window.list.tabName"));
-		SashForm sashForm = new SashForm(tabFolder, SWT.HORIZONTAL);
-		sashForm.setLayoutData(swing2swt.layout.BorderLayout.CENTER);
+		//SashForm sashForm = new SashForm(tabFolder, SWT.HORIZONTAL);
+		//sashForm.setLayoutData(swing2swt.layout.BorderLayout.CENTER);
 		
-		composite = new Composite(sashForm, SWT.BORDER);
+		//composite = new Composite(sashForm, SWT.BORDER);
 		
-		treeViewer = new WindowTreeView(composite, SWT.BORDER);
+		treeViewer = new WindowTreeView(tabFolder, SWT.BORDER, context);
+		
 		tree = treeViewer.getTree();
+		tree.setHeaderVisible(true);
+		TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
+		tree.setLinesVisible(true);
+		column1.setAlignment(SWT.LEFT);
+		column1.setText("Land/Stadt");
+		column1.setWidth(160);
+		TreeColumn column2 = new TreeColumn(tree, SWT.RIGHT);
+		column2.setAlignment(SWT.LEFT);
+		column2.setText("Person");
+		column2.setWidth(100);
+		TreeColumn column3 = new TreeColumn(tree, SWT.RIGHT);
+		column3.setAlignment(SWT.LEFT);
+		column3.setText("m/w");
+		column3.setWidth(35);
+		
+		
 		tree.setBounds(0, 0, 115, 182);
-		treeViewer.setInput(windowService.getNode());
+		treeViewer.setInput(context.getWindowService().getNode());
 		
-		Composite composite2 = new Composite(sashForm, SWT.BORDER);
+		tbtmNewItem3.setControl(tree);
 		
-		Button btnRadioButton = new Button(composite2, SWT.RADIO);
-		btnRadioButton.setBounds(10, 40, 97, 17);
-		btnRadioButton.setText("Radio Button");
-		sashForm.setWeights(new int[] {119, 312});
+//		Composite composite2 = new Composite(sashForm, SWT.BORDER);
+//		
+//		Button btnRadioButton = new Button(composite2, SWT.RADIO);
+//		btnRadioButton.setBounds(10, 40, 97, 17);
+//		btnRadioButton.setText("Radio Button");
+//		sashForm.setWeights(new int[] {119, 312});
 		
 
-		tbtmNewItem3.setControl(sashForm);
+//		tbtmNewItem3.setControl(sashForm);
 		
 		
 		m_bindingContext = initDataBindings();
@@ -165,7 +181,7 @@ public class MainUI extends ApplicationWindow {
 				
 				if(ret == TitleAreaDialog.OK){
 					item = micd.getMaterialItem();
-					mtrlService.add(item);
+					context.getMtrlService().add(item);
 					
 					tableViewer.refresh();
 				}
@@ -186,7 +202,7 @@ public class MainUI extends ApplicationWindow {
 				
 				if(ret == TitleAreaDialog.OK){
 					item = micd.getAuxiliaryMaterial();
-					auMaterialService.add(item);
+					context.getAuMaterialService().add(item);
 					
 					auTableViewer.refresh();
 				}
@@ -306,9 +322,9 @@ public class MainUI extends ApplicationWindow {
 		IObservableValue observeBoundsContainerObserveWidget = WidgetProperties.bounds().observe(container);
 		bindingContext.bindValue(observeBoundsTabObserveWidget, observeBoundsContainerObserveWidget, null, null);
 		
-		IObservableValue observeBoundsTreeViewerObserveWidget = WidgetProperties.bounds().observe(tree);
-		IObservableValue observeBoundsCompositeObserveWidget = WidgetProperties.bounds().observe(composite);
-		bindingContext.bindValue(observeBoundsTreeViewerObserveWidget, observeBoundsCompositeObserveWidget, null, null);
+		//IObservableValue observeBoundsTreeViewerObserveWidget = WidgetProperties.bounds().observe(tree);
+		//IObservableValue observeBoundsCompositeObserveWidget = WidgetProperties.bounds().observe(composite);
+		//bindingContext.bindValue(observeBoundsTreeViewerObserveWidget, observeBoundsCompositeObserveWidget, null, null);
 		//
 		
 		//IObservableValue observeBoundsTableObserveWidget = WidgetProperties.bounds().observe(table);
